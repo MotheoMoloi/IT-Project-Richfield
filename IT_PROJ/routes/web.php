@@ -15,5 +15,18 @@ use App\Http\Controllers\AuthController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('landing');
+})->name('landing');
+
+Route::get('/index', function () {
+    return view('index');
+})->name('index');
+
+
+Route::get('/admin_login', function () {
+    return view('admin_login');
+})->name('admin_login');
+
+Route::get('/sign_up', function () {
+    return view('sign_up');
+})->name('sign_up');
