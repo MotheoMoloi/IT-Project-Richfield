@@ -10,7 +10,7 @@ class UserController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $booksBorrowed = 0; //imma add actual books count from database
+        $booksBorrowed = 0; //imma add actual books count from database(emihle)
         
         return view('user.dashboard', compact('user', 'booksBorrowed'));
     }
@@ -46,7 +46,7 @@ class UserController extends Controller
     public function issuedBooks()
     {
         $user = Auth::user();
-        $issuedBooks = []; // imma add actual data here
+        $issuedBooks = []; // imma add actual data here(im cooked)
         
         return view('user.issued-books', compact('user', 'issuedBooks'));
     }
