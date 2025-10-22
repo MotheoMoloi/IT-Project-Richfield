@@ -27,6 +27,7 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request)
     {
+        /** @var \App\Models\Admin $admin */
         $admin = Auth::guard('admin')->user();
         
         $validated = $request->validate([
