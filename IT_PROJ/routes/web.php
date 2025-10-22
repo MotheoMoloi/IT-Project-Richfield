@@ -41,3 +41,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.change');
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 });
+
+// New book management routes
+Route::get('/admin/books', [AdminController::class, 'manageBooks'])->name('admin.books.manage');
+Route::get('/admin/books/{id}/edit', [AdminController::class, 'editBook'])->name('admin.books.edit');
+Route::put('/admin/books/{id}', [AdminController::class, 'updateBook'])->name('admin.books.update');
+Route::delete('/admin/books/{id}', [AdminController::class, 'deleteBook'])->name('admin.books.delete');
