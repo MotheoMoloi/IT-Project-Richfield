@@ -50,7 +50,7 @@
                             <i class="fas fa-sign-in-alt me-2"></i>Login
                         </button>
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{ route('register') }}" class="btn btn-outline-primary">
+                            <a href="{{ route('register.post') }}" class="btn btn-outline-primary">
                                 <i class="fas fa-user-plus me-2"></i>Create Account
                             </a>
                             <a href="{{ route('password.change') }}" class="text-primary">
@@ -62,7 +62,7 @@
                     <hr class="my-4">
                     
                     <div class="text-center">
-                        <p class="mb-0">Staff access? <a href="{{ route('admin.login') }}" class="fw-bold">Administrator Login</a></p>
+                        <p class="mb-0">Staff access? <a href="{{ route('admin.login.post') }}" class="fw-bold">Administrator Login</a></p>
                     </div>
                 </div>
             </div>

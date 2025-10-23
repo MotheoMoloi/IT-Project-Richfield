@@ -48,7 +48,7 @@
                     <h3 class="card-title text-center mb-4 admin-title"><i class="fas fa-user-shield me-2"></i>Administrator Login</h3>
                     
                     <!-- EMIHLE - the action needs to be updated to work with databse (same as otherone) -->
-                    <form id="adminLoginForm" action="{{ route('admin.login') }}" method="post">
+                    <form id="adminLoginForm" action="{{ route('admin.login.post') }}" method="post">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label"><i class="fas fa-envelope admin-icon me-2"></i>Admin Email</label>

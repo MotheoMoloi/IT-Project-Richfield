@@ -11,36 +11,111 @@
                     <i class="fas fa-edit me-2"></i>Edit Book Details
                 </div>
                 <div class="card-body p-4">
+                    <!-- Success Message -->
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.books.update', $book->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         
                         <div class="mb-3">
-                            <label for="book_name" class="form-label">Book Name</label>
-                            <input type="text" class="form-control-custom form-control" id="book_name" name="book_name" value="{{ old('book_name', $book->book_name) }}" required>
+                            <label for="book_name" class="form-label">
+                                <i class="fas fa-book text-primary me-2"></i>Book Name
+                            </label>
+                            <input type="text" class="form-control-custom form-control @error('book_name') is-invalid @enderror" 
+                                   id="book_name" name="book_name" 
+                                   value="{{ old('book_name', $book->book_name) }}" required>
+                            @error('book_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="mb-3">
-                            <label for="book_author" class="form-label">Author</label>
-                            <input type="text" class="form-control-custom form-control" id="book_author" name="book_author" value="{{ old('book_author', $book->book_author) }}" required>
+                            <label for="book_author" class="form-label">
+                                <i class="fas fa-user text-primary me-2"></i>Author
+                            </label>
+                            <input type="text" class="form-control-custom form-control @error('book_author') is-invalid @enderror" 
+                                   id="book_author" name="book_author" 
+                                   value="{{ old('book_author', $book->book_author) }}" required>
+                            @error('book_author')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="mb-3">
-                            <label for="isbn" class="form-label">ISBN Number</label>
-                            <input type="text" class="form-control-custom form-control" id="isbn" name="isbn" value="{{ old('isbn', $book->isbn) }}" required>
+                            <label for="category" class="form-label">
+                                <i class="fas fa-tags text-primary me-2"></i>Category
+                            </label>
+                            <input type="text" class="form-control-custom form-control @error('category') is-invalid @enderror" 
+                                   id="category" name="category" 
+                                   value="{{ old('category', $book->category) }}"
+                                   placeholder="e.g., Computer Science, Fiction, Business">
+                            @error('category')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="mb-3">
-                            <label for="year" class="form-label">Publication Year</label>
-                            <input type="number" class="form-control-custom form-control" id="year" name="year" value="{{ old('year', $book->year) }}" min="1900" max="{{ date('Y') }}" required>
+                            <label for="isbn" class="form-label">
+                                <i class="fas fa-barcode text-primary me-2"></i>ISBN Number
+                            </label>
+                            <input type="text" class="form-control-custom form-control @error('isbn') is-invalid @enderror" 
+                                   id="isbn" name="isbn" 
+                                   value="{{ old('isbn', $book->isbn) }}" required>
+                            @error('isbn')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="year" class="form-label">
+                                        <i class="fas fa-calendar text-primary me-2"></i>Publication Year
+                                    </label>
+                                    <input type="number" class="form-control-custom form-control @error('year') is-invalid @enderror" 
+                                           id="year" name="year" 
+                                           value="{{ old('year', $book->year) }}" 
+                                           min="1900" max="{{ date('Y') }}" required>
+                                    @error('year')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">
+                                        <i class="fas fa-money-bill text-primary me-2"></i>Price (ZAR)
+                                    </label>
+                                    <input type="number" step="0.01" class="form-control-custom form-control @error('price') is-invalid @enderror" 
+                                           id="price" name="price" 
+                                           value="{{ old('price', $book->price) }}"
+                                           placeholder="0.00">
+                                    @error('price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-control-custom form-control" id="status" name="status" required>
-                                <option value="available" {{ $book->status === 'available' ? 'selected' : '' }}>Available</option>
-                                <option value="checked_out" {{ $book->status === 'checked_out' ? 'selected' : '' }}>Checked Out</option>
+                            <label for="status" class="form-label">
+                                <i class="fas fa-info-circle text-primary me-2"></i>Status
+                            </label>
+                            <select class="form-control-custom form-control @error('status') is-invalid @enderror" 
+                                    id="status" name="status" required>
+                                <option value="available" {{ old('status', $book->status) == 'available' ? 'selected' : '' }}>Available</option>
+                                <option value="checked_out" {{ old('status', $book->status) == 'checked_out' ? 'selected' : '' }}>Checked Out</option>
+                                <option value="reserved" {{ old('status', $book->status) == 'reserved' ? 'selected' : '' }}>Reserved</option>
                             </select>
+                            @error('status')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">

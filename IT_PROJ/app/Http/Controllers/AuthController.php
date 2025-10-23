@@ -33,23 +33,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // MOTHEO - 
-        if ($credentials['email'] === 'student@richfield.ac.za' && $credentials['password'] === 'password') {
-            $user = new User([
-                'id' => 1,
-                'name' => 'Demo Student',
-                'student_number' => 'STU2024001',
-                'email' => 'student@richfield.ac.za',
-                'mobile' => '+27 83 123 4567',
-                'address' => '123 Main Street, Johannesburg'
-            ]);
-        
-            Auth::login($user);
-            $request->session()->regenerate();
-            return redirect()->route('user.dashboard');
-        }
-        // everything here
-
+        // Remove hardcoded demo and use database authentication
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('user.dashboard');
@@ -67,26 +51,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // MOTHEO - i made a hard coded admin to test out some stuff
-        if ($credentials['email'] === 'admin@richfield.ac.za' && $credentials['password'] === 'password') {
-            $admin = new Admin([
-                'id' => 1,
-                'name' => 'Demo Admin',
-                'email' => 'admin@richfield.ac.za',
-                'position' => 'Head Librarian',
-                'department' => 'Library Services',
-                'office' => 'Library Building, Office 201',
-                'mobile' => '+27 83 987 6543',
-                'address' => '456 Admin Avenue, Johannesburg'
-            ]);
-
-        // u can delete everything above this
-            
-            Auth::guard('admin')->login($admin);
-            $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
-        }
-
+        // Remove hardcoded demo and use database authentication
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
@@ -117,12 +82,20 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('login')->with('success', 'Registration successful! You can login big dawg.');
+        // Auto-login after registration
+        Auth::attempt($request->only('email', 'password'));
+
+        return redirect()->route('user.dashboard')->with('success', 'Registration successful! Welcome to Richfield Library.');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        } else {
+            Auth::logout();
+        }
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
@@ -141,10 +114,15 @@ class AuthController extends Controller
             'new_password' => 'required|min:8|confirmed',
         ]);
 
-        $user = Auth::user();
+        // Check if user is admin or regular user
+        if (Auth::guard('admin')->check()) {
+            $user = Auth::guard('admin')->user();
+        } else {
+            $user = Auth::user();
+        }
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Current password is incorrect dawg.']);
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 
         $user->update([

@@ -43,6 +43,23 @@
         height: 3px;
         background-color: var(--richfield-blue);
     }
+    
+    .profile-field {
+        margin-bottom: 1.5rem;
+    }
+    
+    .profile-label {
+        font-weight: 600;
+        color: var(--richfield-blue);
+        margin-bottom: 0.5rem;
+    }
+    
+    .profile-value {
+        padding: 0.75rem;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border: 1px solid #dee2e6;
+    }
 </style>
 @endpush
 
@@ -67,39 +84,80 @@
                     </h4>
                     
                     <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <form class="profile-form">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control-custom form-control" id="name" value="{{ $user->name ?? '' }}" disabled>
+                        <div class="col-md-10">
+                            <div class="profile-form">
+                                <!-- Success Message -->
+                                @if(session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                @endif
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Full Name</div>
+                                            <div class="profile-value">{{ $user->name ?? 'Not provided' }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Email Address</div>
+                                            <div class="profile-value">{{ $user->email ?? 'Not provided' }}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="text" class="form-control-custom form-control" id="email" value="{{ $user->email ?? '' }}" disabled>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Student Number</div>
+                                            <div class="profile-value">{{ $user->student_number ?? 'Not provided' }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Academic Program</div>
+                                            <div class="profile-value">{{ $user->program ?? 'Not specified' }}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="studentId" class="form-label">Student ID</label>
-                                    <input type="text" class="form-control-custom form-control" id="studentId" value="{{ $user->student_number ?? '' }}" disabled>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Mobile Number</div>
+                                            <div class="profile-value">{{ $user->mobile ?? 'Not provided' }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="profile-field">
+                                            <div class="profile-label">Account Type</div>
+                                            <div class="profile-value">Student</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="mobile" class="form-label">Mobile Number</label>
-                                    <input type="text" class="form-control-custom form-control" id="mobile" value="{{ $user->mobile ?? '' }}" disabled>
+
+                                <div class="profile-field">
+                                    <div class="profile-label">Residential Address</div>
+                                    <div class="profile-value">{{ $user->address ?? 'Not provided' }}</div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="address" class="form-label">Residential Address</label>
-                                    <textarea class="form-control-custom form-control" id="address" rows="3" disabled>{{ $user->address ?? '' }}</textarea>
+
+                                <div class="profile-field">
+                                    <div class="profile-label">Member Since</div>
+                                    <div class="profile-value">{{ $user->created_at->format('F d, Y') }}</div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="program" class="form-label">Academic Program</label>
-                                    <!-- MOTHEO - this field might need to be added to the User model ngl -->
-                                    <input type="text" class="form-control-custom form-control" id="program" value="{{ $user->program ?? 'Not specified' }}" disabled>
-                                </div>
+
                                 <div class="text-center mt-4">
                                     <a href="{{ route('user.profile.edit') }}" class="btn btn-primary-custom btn-primary px-4">
                                         <i class="fas fa-edit me-2"></i>Edit Profile
                                     </a>
+                                    <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary px-4 ms-2">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                    </a>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

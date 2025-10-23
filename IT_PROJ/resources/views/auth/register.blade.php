@@ -35,7 +35,7 @@
                     <h3 class="card-title text-center mb-4"><i class="fas fa-user-plus text-primary me-2"></i>Create Your Account</h3>
                     
                     <!-- EMIHLE - u need to update the form somehow using database , dunno if it works yet-->
-                    <form id="registrationForm" action="{{ route('register') }}" method="POST">
+                    <form id="registrationForm" action="{{ route('register.post') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label"><i class="fas fa-user text-primary me-2"></i>Full Name</label>
@@ -85,7 +85,7 @@
                     <hr class="my-4">
                     
                     <div class="text-center">
-                        <p class="mb-0">Staff member? <a href="{{ route('admin.login') }}" class="fw-bold">Administrator Login</a></p>
+                        <p class="mb-0">Staff member? <a href="{{ route('admin.login.form') }}" class="fw-bold">Administrator Login</a></p>
                     </div>
                 </div>
             </div>

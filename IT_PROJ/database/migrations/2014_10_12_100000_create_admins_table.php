@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('position')->nullable();
             $table->string('department')->nullable();
             $table->string('office')->nullable();
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin');
+        Schema::dropIfExists('admins');
     }
 };

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('author');
+            $table->string('book_name');
+            $table->string('book_author');
+            $table->string('category')->nullable();
             $table->string('isbn')->unique();
-            $table->string('year');
+            $table->integer('year');
+            $table->decimal('price', 8, 2)->nullable();
+            $table->enum('status', ['available', 'checked_out', 'reserved'])->default('available');
             $table->timestamps();
         });
     }

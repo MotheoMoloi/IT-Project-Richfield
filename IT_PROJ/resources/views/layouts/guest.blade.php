@@ -17,12 +17,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.login') ? 'active' : '' }}" href="{{ route('admin.login') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.login.form') ? 'active' : '' }}" href="{{ route('admin.login.form') }}">
                         <i class="fas fa-user-shield me-1"></i> Admin Login
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('register') ? 'active' : '' }}" href="{{ route('register') }}">
+                    <a class="nav-link {{ request()->routeIs('register.form') ? 'active' : '' }}" href="{{ route('register.form') }}">
                         <i class="fas fa-user-plus me-1"></i> Register
                     </a>
                 </li>
