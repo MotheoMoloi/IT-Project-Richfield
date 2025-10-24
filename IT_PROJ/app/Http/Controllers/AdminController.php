@@ -71,7 +71,7 @@ class AdminController extends Controller
             $query->where('status', 'issued');
         }])->orderBy('name')->paginate(10);
 
-        return view('admin.users.index', compact('admin', 'users'));
+        return view('admin.manage-users', compact('admin', 'users'));
     }
 
     public function showUser($id)

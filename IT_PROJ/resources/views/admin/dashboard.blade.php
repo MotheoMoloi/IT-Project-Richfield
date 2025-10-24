@@ -54,7 +54,7 @@
                     </div>
                     <div class="stat-number">{{ $userCount }}</div>
                     <div class="stat-label">Active Library Users</div>
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-primary-custom btn-primary mt-3">
+                    <a href="{{ route('admin.manage-users') }}" class="btn btn-primary-custom btn-primary mt-3">
                         <i class="fas fa-user-cog me-2"></i>Manage Users
                     </a>
                 </div>
@@ -181,7 +181,7 @@
                     <a href="{{ route('admin.books.manage') }}" class="btn btn-outline-primary btn-lg w-100 mb-2">
                         <i class="fas fa-book-open me-2"></i>Manage Books
                     </a>
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary btn-lg w-100 mb-2">
+                    <a href="{{ route('admin.manage-users') }}" class="btn btn-outline-primary btn-lg w-100 mb-2">
                         <i class="fas fa-users me-2"></i>Manage Users
                     </a>
                     <a href="{{ route('admin.borrows.index') }}" class="btn btn-outline-primary btn-lg w-100">
