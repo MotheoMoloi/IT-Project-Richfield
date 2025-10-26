@@ -28,15 +28,39 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Admin Avenue, Johannesburg',
         ]);
 
-        User::create([
-            'name' => 'Demo Student',
-            'student_number' => 'STU2024001',
-            'email' => 'student@richfield.ac.za',
-            'password' => Hash::make('password'),
-            'mobile' => '+27 83 123 4567',
-            'address' => '123 Main Street, Johannesburg',
-            'program' => 'BSc Computer Science',
-        ]);
+        $users=[
+            [
+                'name' => 'Demo Student',
+                'student_number' => 'STU2024001',
+                'email' => 'student@richfield.ac.za',
+                'password' => Hash::make('password'),
+                'mobile' => '+27 83 123 4567',
+                'address' => '123 Main Street, Johannesburg',
+                'program' => 'BSc Computer Science',
+            ],
+            [
+                'name'=> 'John Po',
+                'student_number'=> 'STU2024002',
+                'email'=> 'johnpo@richfield.ac.za',
+                'password'=> Hash::make('password'),
+                'mobile'=>'+27 67 676 6767',
+                'address'=>'56 Luke Street, Johannesburg',
+                'program'=>'BSc Information Technology',
+            ],
+            [
+                'name'=> 'Chilled Guy',
+                'student_number'=> 'STU2024003',
+                'email'=> 'chilledg@richfield.ac.za',
+                'password'=> Hash::make('password'),
+                'mobile'=>'+27 81 334 5612',
+                'address'=>'223 Main Road, Johannesburg',
+                'program'=>'BCom Accounting',
+            ]
+        ];
+
+        foreach ($users as $user) {
+            User::create($user);
+        }
 
         $books = [
             [
