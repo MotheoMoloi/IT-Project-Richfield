@@ -50,4 +50,27 @@ class User extends Authenticatable
     {
         return $this->hasMany(Borrow::class)->orderBy('created_at', 'desc');
     }
+
+    public function returnedBooks()
+    {
+        return $this->hasMany(Borrow::class)->where('status', 'returned');
+    }
+
+    public function overdueBooks()
+    {
+        return $this->hasMany(Borrow::class)->overdue();
+    }
+
+
+    public function hasReachedBorrowingLimit()
+    {
+        $maxBooks = 100;
+        return $this->borrowedBooks()->count() >= $maxBooks;
+    }
+
+
+    public function getTotalFinesAttribute()
+    {
+        return $this->borrows()->sum('fine_amount');
+    }
 }

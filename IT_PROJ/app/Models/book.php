@@ -19,7 +19,6 @@ class Book extends Model
         'status',
     ];
 
-    /* get the borrows for the book.*/
     public function borrows()
     {
         return $this->hasMany(Borrow::class);
@@ -30,6 +29,7 @@ class Book extends Model
         return $this->hasOne(Borrow::class)->where('status', 'issued');
     }
 
+
     public function isAvailable()
     {
         return $this->status === 'available';
@@ -38,5 +38,23 @@ class Book extends Model
     public function isCheckedOut()
     {
         return $this->status === 'checked_out';
+    }
+
+
+    public function borrowingHistory()
+    {
+        return $this->hasMany(Borrow::class)->orderBy('created_at', 'desc');
+    }
+
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('status', 'available');
+    }
+
+    //will only give the checked_out books
+    public function scopeCheckedOut($query)
+    {
+        return $query->where('status', 'checked_out');
     }
 }

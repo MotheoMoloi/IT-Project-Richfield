@@ -156,25 +156,77 @@ class AdminController extends Controller
         return redirect()->route('admin.books.manage')->with('success', 'Book deleted successfully.');
     }
 
-    public function manageBorrows()
+    public function manageBorrows(Request $request)
     {
         $admin = Auth::guard('admin')->user();
-        $borrows = Borrow::with(['user', 'book'])
-            ->orderBy('created_at', 'desc')
+
+        $query = Borrow::with(['user', 'book'])
+            ->whereIn('status', ['issued', 'renewed', 'overdue']);
+
+        // Filter by status
+        if ($request->has('status') && $request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $borrows = $query->orderBy('due_date')
             ->paginate(15);
 
-        return view('admin.borrows.index', compact('admin', 'borrows'));
+        // Statistics
+        $totalBorrows = Borrow::whereIn('status', ['issued', 'renewed'])->count();
+        $overdueCount = Borrow::where('status', 'overdue')->count();
+        $dueSoonCount = Borrow::where('status', 'issued')
+            ->where('due_date', '<=', now()->addDays(3))
+            ->where('due_date', '>', now())
+            ->count();
+        $renewedCount = Borrow::where('status', 'renewed')->count();
+        $issuedCount = Borrow::where('status', 'issued')->count();
+
+        // Return the renamed view
+        return view('admin.view-borrows', compact(
+            'admin', 
+            'borrows',
+            'totalBorrows',
+            'overdueCount',
+            'dueSoonCount',
+            'renewedCount',
+            'issuedCount'
+        ));
     }
 
     public function overdueBooks()
     {
         $admin = Auth::guard('admin')->user();
+
         $overdueBooks = Borrow::with(['user', 'book'])
-            ->where('status', 'issued')
-            ->where('due_date', '<', Carbon::now())
+            ->where('due_date', '<', now())
+            ->whereIn('status', ['issued', 'renewed'])
             ->orderBy('due_date')
             ->paginate(15);
 
-        return view('admin.borrows.overdue', compact('admin', 'overdueBooks'));
+        // Statistics
+        $totalOverdue = Borrow::where('due_date', '<', now())
+            ->whereIn('status', ['issued', 'renewed'])
+            ->count();
+
+        $criticalOverdue = Borrow::where('due_date', '<', now()->subDays(7))
+            ->whereIn('status', ['issued', 'renewed'])
+            ->count();
+
+        $studentsWithOverdue = Borrow::where('due_date', '<', now())
+            ->whereIn('status', ['issued', 'renewed'])
+            ->distinct('user_id')
+            ->count('user_id');
+
+        $totalPotentialFines = $totalOverdue * 5; // EMIHLE - dat quick maths twin
+
+        // Return the renamed view
+        return view('admin.overdue-books', compact(
+            'admin',
+            'overdueBooks',
+            'totalOverdue',
+            'criticalOverdue',
+            'studentsWithOverdue',
+            'totalPotentialFines'
+        ));
     }
 }

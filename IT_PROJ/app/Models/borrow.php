@@ -81,4 +81,30 @@ class Borrow extends Model
         return $query->where('status', 'issued')
                     ->where('due_date', '<', Carbon::now());
     }
+
+     /* Scope a query to only include returned books.*/
+    public function scopeReturned($query)
+    {
+        return $query->where('status', 'returned');
+    }
+
+    /* Get the number of days overdue.*/
+    public function getDaysOverdueAttribute()
+    {
+        if (!$this->isOverdue()) {
+            return 0;
+        }
+        
+        return $this->due_date->diffInDays(Carbon::now());
+    }
+
+    /* Get the number of days until due.*/
+    public function getDaysUntilDueAttribute()
+    {
+        if ($this->due_date->isPast()) {
+            return 0;
+        }
+        
+        return $this->due_date->diffInDays(Carbon::now());
+    }
 }

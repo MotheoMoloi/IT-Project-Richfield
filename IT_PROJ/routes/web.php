@@ -39,6 +39,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/books/{book}/borrow', [BorrowController::class, 'borrowBook'])->name('user.books.borrow');
     Route::post('/user/books/{borrow}/renew', [BorrowController::class, 'renewBook'])->name('user.books.renew');
     Route::post('/user/books/{borrow}/return', [BorrowController::class, 'returnBook'])->name('user.books.return');
+
+    // Borrowing history and management
+    Route::get('/user/borrowing-history', [UserController::class, 'borrowingHistory'])->name('user.borrowing.history');
+    Route::post('/user/books/{book}/borrow', [UserController::class, 'borrowBook'])->name('user.books.borrow');
+    Route::post('/user/books/{borrow}/renew', [UserController::class, 'renewBook'])->name('user.books.renew');
+    Route::post('/user/books/{borrow}/return', [UserController::class, 'returnBook'])->name('user.books.return');
 });
 
 // Admin Routes (Protected)
