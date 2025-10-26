@@ -77,16 +77,6 @@ class UserController extends Controller
         return view('user.issued-books', compact('user', 'issuedBooks', 'overdueCount'));
     }
 
-    public function borrowingHistory()
-    {
-        $user = Auth::user();
-        $borrowingHistory = Borrow::with('book')
-            ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('user.borrowing-history', compact('user', 'borrowingHistory'));
-    }
 
     public function searchBooks(Request $request)
     {
@@ -118,5 +108,139 @@ class UserController extends Controller
             ->pluck('category');
 
         return view('user.book-browse', compact('user', 'books', 'categories'));
+    }
+
+    public function borrowingHistory(Request $request)
+    {
+        $user = Auth::user();
+        
+        $status = $request->get('status', 'all');
+        $search = $request->get('search', '');
+        
+        // Start query
+        $query = Borrow::with('book')
+            ->where('user_id', $user->id);
+        
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        if ($search) {
+            $query->whereHas('book', function($q) use ($search) {
+                $q->where('book_name', 'like', "%{$search}%")
+                  ->orWhere('book_author', 'like', "%{$search}%")
+                  ->orWhere('isbn', 'like', "%{$search}%");
+            });
+        }
+        
+        $borrowingHistory = $query->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // basically gets all the users stats 
+        $totalBooksBorrowed = Borrow::where('user_id', $user->id)->count();
+        $returnedCount = Borrow::where('user_id', $user->id)
+            ->where('status', 'returned')
+            ->count();
+        $currentlyBorrowed = Borrow::where('user_id', $user->id)
+            ->where('status', 'issued')
+            ->count();
+        $renewedCount = Borrow::where('user_id', $user->id)
+            ->where('status', 'renewed')
+            ->count();
+        $overdueCount = Borrow::where('user_id', $user->id)
+            ->overdue()
+            ->count();
+        $totalFines = Borrow::where('user_id', $user->id)
+            ->sum('fine_amount');
+
+        return view('user.borrowing-history', compact(
+            'user',
+            'borrowingHistory',
+            'totalBooksBorrowed',
+            'returnedCount',
+            'currentlyBorrowed',
+            'renewedCount',
+            'overdueCount',
+            'totalFines',
+            'status',
+            'search'
+        ));
+    }
+
+    public function borrowBook(Request $request, $bookId)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($bookId);
+
+        if (!$book->isAvailable()) {
+            return redirect()->back()->with('error', 'This book is not available for borrowing.');
+        }
+
+        if ($user->hasReachedBorrowingLimit()) {
+            return redirect()->back()->with('error', 'You have reached the maximum borrowing limit of 100 books.');
+        }
+
+        // checks if they already have the book
+        $existingBorrow = Borrow::where('user_id', $user->id)
+            ->where('book_id', $book->id)
+            ->whereIn('status', ['issued', 'renewed'])
+            ->exists();
+
+        if ($existingBorrow) {
+            return redirect()->back()->with('error', 'You have already borrowed this book.');
+        }
+
+        // creats the record for borrowing 
+        $borrow = Borrow::create([
+            'user_id' => $user->id,
+            'book_id' => $book->id,
+            'issue_date' => Carbon::now(),
+            'due_date' => Carbon::now()->addDays(14), // it sets it for 2 weeks but we can make it however long 
+            'status' => 'issued',
+        ]);
+
+        $book->update(['status' => 'checked_out']);
+
+        return redirect()->route('user.issued-books')
+            ->with('success', 'Book borrowed successfully. Due date: ' . $borrow->due_date->format('M d, Y'));
+    }
+
+    public function renewBook($borrowId)
+    {
+        $user = Auth::user();
+        $borrow = Borrow::where('id', $borrowId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+
+        $borrow->update([
+            'due_date' => $borrow->due_date->addDays(7),
+            'renewal_count' => $borrow->renewal_count + 1,
+            'status' => 'renewed',
+        ]);
+
+        return redirect()->back()->with('success', 'Book renewed successfully. New due date: ' . $borrow->due_date->format('M d, Y'));
+    }
+
+    public function returnBook($borrowId)
+    {
+        $user = Auth::user();
+        $borrow = Borrow::where('id', $borrowId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        // updates the borrow record
+        $borrow->update([
+            'return_date' => Carbon::now(),
+            'status' => 'returned',
+            'fine_amount' => $fineAmount,
+        ]);
+
+        $book = Book::find($borrow->book_id);
+        $book->update(['status' => 'available']);
+
+        $message = 'Book returned successfully.';
+
+        return redirect()->back()->with('success', $message);
     }
 }
