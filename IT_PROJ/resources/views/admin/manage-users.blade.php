@@ -52,17 +52,6 @@
             color: #6c757d;
         }
         
-        /* Backend note styling */
-        .backend-note {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 5px;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            color: #856404;
-        }
-        
-        /* Empty state styling */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -92,13 +81,7 @@
         </div>
     </div>
 
-    <!-- Backend Note -->
-    <div class="backend-note">
-        <i class="fas fa-info-circle"></i>
-        <strong>Note:</strong> User management system - data is dynamically loaded from the database.
-    </div>
-
-    <!-- Statistics Card - Only Total Users -->
+    <!-- Statistics Card -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="stats-card bg-white">
@@ -199,10 +182,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Note:</strong> This is a demonstration modal. Backend functionality needs to be implemented for user registration.
-                </div>
                 <form>
                     <div class="row">
                         <div class="col-md-6">
