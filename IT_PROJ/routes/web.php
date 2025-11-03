@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\ChatBotController;
 
 // Authentication Routes
 Route::get('/', [AuthController::class, 'showLogin'])->name('home');
@@ -17,6 +18,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Admin Authentication
 Route::get('/admin/login', [AuthController::class, 'showAdminLogin'])->name('admin.login.form');
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login.post');
+
+// Chatbot Route (Public - accessible to everyone)
+Route::post('/chatbot/message', [ChatBotController::class, 'handleMessage'])->name('chatbot.message');
 
 // Change Password (accessible to both)
 Route::middleware(['auth'])->group(function () {
