@@ -91,7 +91,7 @@
         </div>
     </div>
 
-    <!-- Search Section -->
+    <!-- Search Section 
     <div class="card mb-4">
         <div class="card-body">
             <div class="row g-3">
@@ -111,6 +111,7 @@
             </div>
         </div>
     </div>
+    -->
 
     <!-- Users Table -->
     <div class="card">
@@ -172,7 +173,7 @@
 </div>
 
 <!-- Add User Modal -->
-<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -224,4 +225,5 @@
         </div>
     </div>
 </div>
+-->
 @endsection

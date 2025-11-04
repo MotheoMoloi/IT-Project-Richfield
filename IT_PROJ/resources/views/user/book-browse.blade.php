@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <!-- Search and Filter -->
+    <!-- Search and Filter 
     <div class="row mb-4">
         <div class="col-12">
             <div class="search-box">
@@ -103,6 +103,7 @@
             </div>
         </div>
     </div>
+    -->
 
     <!-- Books Grid -->
     <div class="row g-4">
@@ -181,17 +182,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add confirmation for borrow actions
-        const borrowForms = document.querySelectorAll('form[action*="borrow"]');
-        borrowForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('u sure this book?')) {
-                    e.preventDefault();
-                }
-            });
-        });
-    });
-</script>
+
 @endpush
