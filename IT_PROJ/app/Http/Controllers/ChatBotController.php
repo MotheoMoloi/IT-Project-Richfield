@@ -21,7 +21,7 @@ class ChatBotController extends Controller
     {
         // Check for greetings
         if (preg_match('/\b(hi|hello|hey|good morning|good afternoon)\b/', $message)) {
-            return "Hello! I can help you find books in our library. What book are you looking for?";
+            return "Hello! Im here to help you find books in our library. Which book are you looking for?";
         }
         
         // Check for help request
@@ -40,7 +40,7 @@ class ChatBotController extends Controller
             $matchingBooks = $this->searchBooks($searchTerms, $books);
             
             if ($matchingBooks->isEmpty()) {
-                return "I couldn't find any books matching your search. Try different keywords or ask for help.";
+                return "Couldn't find any books matching your search. Try different keywords or ask for help.";
             }
             
             return $this->formatBookResults($matchingBooks);
